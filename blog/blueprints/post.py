@@ -1,14 +1,12 @@
 from flask import Blueprint, render_template,request ,session, redirect,url_for, flash
-from blog.db import get_db
-import sqlite3
 import datetime
 from functools import wraps
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, validators, TextAreaField
-from ..forms import PostForm, ReplyPostForm, EditPostForm , EditReplyForm
+from blog.forms import PostForm, ReplyPostForm, EditPostForm , EditReplyForm
 
 # define our blueprint
-blog_bp = Blueprint('blog', __name__)
+post_bp = Blueprint('post', __name__)
 
 def login_required(f):
     @wraps(f)
@@ -28,8 +26,8 @@ def login_required(f):
     return check
 
 
-@blog_bp.route('/' , methods = ['GET', 'POST'])
-@blog_bp.route('/posts' , methods = ['GET', 'POST'])
+@post_bp.route('/' , methods = ['GET', 'POST'])
+@post_bp.route('/posts' , methods = ['GET', 'POST'])
 @login_required
 def index():
     
@@ -86,7 +84,7 @@ def index():
     return render_template("blog/index.html", form = add_post_form , posts = posts)
 
 
-@blog_bp.route('/myposts')
+@post_bp.route('/myposts')
 @login_required
 def myposts():
     
@@ -101,7 +99,7 @@ def myposts():
 
 
 
-@blog_bp.route('/post/add', methods = ['GET', 'POST'])
+@post_bp.route('/post/add', methods = ['GET', 'POST'])
 @login_required
 def add_post():
 
@@ -141,7 +139,7 @@ def add_post():
     return render_template("blog/add-post.html", form = post_form)
 
 
-@blog_bp.route('/post/<int:post_id>/delete', methods = ['GET', 'POST'])
+@post_bp.route('/post/<int:post_id>/delete', methods = ['GET', 'POST'])
 @login_required
 def delete_post(post_id):
 
@@ -154,7 +152,7 @@ def delete_post(post_id):
     return redirect(url_for("blog.myposts"))
 
 
-@blog_bp.route('/post/<int:post_id>/edit', methods = ['GET', 'POST'])
+@post_bp.route('/post/<int:post_id>/edit', methods = ['GET', 'POST'])
 @login_required
 def edit_post(post_id):
 
@@ -201,7 +199,7 @@ def edit_post(post_id):
     return render_template("blog/edit_post.html", form = edit_post_form)
 
 
-@blog_bp.route('/post/<int:post_id>/add_reply', methods = ['GET', 'POST'])
+@post_bp.route('/post/<int:post_id>/add_reply', methods = ['GET', 'POST'])
 @login_required
 def reply_post(post_id):
     db = get_db()
@@ -249,7 +247,7 @@ def reply_post(post_id):
     return render_template("blog/reply_post.html", mypost = mypost, post_author = post_author, form = reply_form, replies = replies, users = users)
 
 
-@blog_bp.route('/post/<int:post_id>/delete_reply/<int:reply_id>', methods = ['GET', 'POST'])
+@post_bp.route('/post/<int:post_id>/delete_reply/<int:reply_id>', methods = ['GET', 'POST'])
 @login_required
 def delete_reply(post_id,reply_id):
 
@@ -264,7 +262,7 @@ def delete_reply(post_id,reply_id):
     return redirect(url_for('blog.reply_post', post_id = post_id))
 
 
-@blog_bp.route('/post/<int:post_id>/edit_reply/<int:reply_id>', methods = ['GET', 'POST'])
+@post_bp.route('/post/<int:post_id>/edit_reply/<int:reply_id>', methods = ['GET', 'POST'])
 @login_required
 def edit_reply(post_id,reply_id):
 
@@ -309,10 +307,10 @@ def edit_reply(post_id,reply_id):
     return render_template("blog/edit_reply.html", form = edit_reply_form)
 
 
-@blog_bp.route("/post/<int:post_id>/like")
+@post_bp.route("/post/<int:post_id>/like")
 @login_required
 def like(post_id):
-    .
+    
     db = get_db()
 
     num_of_likes = db.execute("SELECT likes FROM post WHERE id LIKE ?",(post_id,)).fetchone()
@@ -377,7 +375,7 @@ def like(post_id):
         return redirect(url_for("blog.index"))
 
 
-@blog_bp.route("/post/<int:post_id>/dislike")
+@post_bp.route("/post/<int:post_id>/dislike")
 @login_required
 def dislike(post_id):
 
@@ -450,7 +448,7 @@ def dislike(post_id):
         return redirect(url_for("blog.index"))
 
 
-@blog_bp.route("/post/<int:post_id>/favorite")
+@post_bp.route("/post/<int:post_id>/favorite")
 @login_required            
 def favorite(post_id):
 

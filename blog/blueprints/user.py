@@ -1,12 +1,9 @@
 from flask import Blueprint, render_template,request ,redirect, session , flash,url_for
-from blog.db import get_db
-import sqlite3
 from functools import wraps
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, validators, PasswordField, TextAreaField 
-from ..forms import AddUserForm, EditUserInfoForm, ChangePasswordForm
-
-#obj/action/id
+from blog.forms import AddUserForm, EditUserInfoForm, ChangePasswordForm
+from blog.models import User, Post
 
 # define our blueprint
 user_bp = Blueprint('user', __name__)
@@ -27,9 +24,6 @@ def login_required(f):
             
             
     return check
-
-
-
 
 
 
@@ -85,46 +79,33 @@ def show_session():
 @login_required
 def add_user():
 
-    user = AddUserForm()
+    add_user_form = AddUserForm()
 
-    if user.validate_on_submit():
+    if add_user_form.validate_on_submit():
+
+        user = User()
     
-        username = user.username.data
-        password = user.password.data
-        first_name = user.first_name.data
-        last_name = user.last_name.data
-        biography = user.biography.data
-        # get the DB connection
-        db = get_db()
+        user.username = add_user_form.username.data
+        user.password = add_user_form.password.data
+        user.first_name = add_user_form.first_name.data
+        user.last_name = add_user_form.last_name.data
+        user.biography = add_user_form.biography.data
 
-        # insert user into DB
-        try:
-            # execute our insert SQL statement
-            db.execute("INSERT INTO user (username, password , firstname , lastname , biography ) VALUES (?, ? , ? , ?, ?);", (username, password, first_name,last_name, biography))
+        user.save()        
 
-            # write changes to DB
-            db.commit()
-            
-            return redirect("/users")
+        return redirect("/users")
 
-        except sqlite3.Error as er:
-            print('SQLite error: %s' % (' '.join(er.args)))
-            return redirect("/404")
-
-    return render_template('user/index.html' , form = user )
+    return render_template('user/index.html' , form = add_user_form )
 
 
 
-@user_bp.route('/profile' , methods=['GET', 'POST'])
+@user_bp.route('/profile', methods=['GET', 'POST'])
 @login_required
 def profile():
 
-    current_user = session['uid']
+    user = User.objects(username = session['uid'])
 
-    db = get_db()
-
-    user = db.execute('SELECT * FROM user WHERE id LIKE ?',(current_user,)).fetchone()
-    posts = db.execute('SELECT * FROM post WHERE author_id LIKE ? ORDER BY created DESC',(current_user,)).fetchall()
+    posts = Post.objects(author_id = session['uid']).order_by('-created')
 
         
     flash('You were successfully logged in')

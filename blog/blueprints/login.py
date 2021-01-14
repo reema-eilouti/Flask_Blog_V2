@@ -1,9 +1,7 @@
 from flask import Blueprint, render_template,request ,redirect,session,flash
-from blog.db import get_db
-import sqlite3
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, validators, PasswordField
-from ..forms import LoginForm
+from blog.forms import LoginForm
 
 # define our blueprint
 login_bp = Blueprint('login', __name__)
@@ -11,11 +9,14 @@ login_bp = Blueprint('login', __name__)
 
 @login_bp.route('/login', methods =['POST','GET'])
 def login():
-    login = LoginForm()
-    if login.validate_on_submit():
+
+    login_form = LoginForm()
+
+    if login_form.validate_on_submit():
+
         # read values from the login wtform
-        username = login.username.data
-        password = login.password.data
+        username = login_form.username.data
+        password = login_form.password.data
         
         # get the DB connection
         db = get_db()
@@ -44,8 +45,10 @@ def login():
         except sqlite3.Error as er:
             print('SQLite error: %s' % (' '.join(er.args)))
             return redirect("/404") 
+
+
         # render the login template
-    return render_template('login/login.html', form = login)
+    return render_template('login/login.html', form = login_form)
     
 
 @login_bp.route('/logout')

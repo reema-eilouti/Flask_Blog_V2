@@ -1,7 +1,9 @@
 import os
 
 from flask import Flask
-
+from mongoengine import *
+from blog.models import *
+import json
 
 def create_app(test_config=None):
     # create the Flask
@@ -9,35 +11,54 @@ def create_app(test_config=None):
 
     # configure the app
     app.config.from_mapping(
-        SECRET_KEY='dev1',
-        DATABASE=os.path.join(app.instance_path, 'blog.sqlite'),
+        SECRET_KEY='dev',
+        MONGO_URI="mongodb://root:example@localhost:27017/blog?authSource=admin"
     )
 
-    if test_config is None:
-        # load the instance config, if it exists, when not testing
-        app.config.from_pyfile('config.py', silent=True)
-    else:
-        # load the test config if passed in
-        app.config.from_mapping(test_config)
+    # connect to MongoDB using mongoengine
+    connect(
+        db='blog',
+        username='root',
+        password='example',
+        authentication_source='admin'
+    )
 
-    # ensure the instance folder exists
-    try:
-        os.makedirs(app.instance_path)
-    except OSError:
-        pass
+    # define our collections
+    # users = mongo.blog.users
 
     # a simple page that says hello
     @app.route('/hello')
     def hello():
-        return 'Hello, World!'
+        return 'Hello, world!'
 
-    # import helper DB functions
-    from . import db
-    db.init_app(app)
+    @app.route('/test-db')
+    def test_db():
+        bert = User(email='bert@sesame.com', first_name='Bert',
+                    last_name='Sesame').save()
 
-    # register the 'blog' blueprint
-    from .blueprints.blog import blog_bp
-    app.register_blueprint(blog_bp)
+        cookie = User(email='cookie@monster.com', first_name='Cookie',
+                    last_name='Monster').save()
+        # Create TextPost
+        post1 = TextPost(title='Fun with MongoEngine', author=cookie)
+
+        post1.content = 'Took a look at MongoEngine today, looks pretty cool.'
+        post1.tags = ['mongodb', 'mongoengine']
+        post1.save()
+
+        # Create LinkPost
+        post2 = LinkPost(title='MongoEngine Documentation', author=bert)
+        post2.link_url = 'http://docs.mongoengine.com/'
+        post2.tags = ['mongoengine']
+        post2.save()
+
+        # for post in Post.objects:
+        #     print(post.title)
+
+        return TextPost.objects()
+
+    # register the 'post' blueprint
+    from .blueprints.post import post_bp
+    app.register_blueprint(post_bp)
 
     # register the 'user' blueprint
     from .blueprints.user import user_bp
@@ -46,5 +67,5 @@ def create_app(test_config=None):
     # register the 'login' blueprint
     from .blueprints.login import login_bp
     app.register_blueprint(login_bp)
-    
+
     return app
