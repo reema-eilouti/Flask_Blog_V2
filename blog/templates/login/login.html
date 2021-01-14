@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+<!-- header block -->
+{% block header %}
+
+<h1>{% block title %}Login{% endblock %}</h1>
+{% endblock %}
+
+<!-- content block -->
+{% block content %} {% if message %}
+<div>
+  {{message}}
+</div>
+{% endif %}
+<form method="POST" action="">
+  <center>
+    {{ form.hidden_tag() }}
+    <!-- <input type="hidden" name="next_url" value="{{request.args.get('next' , '')}}"> -->
+
+    <div class="col-md-6 mb-3">
+      {{form.username.label}}
+      {{form.username(class_="form-control")}}
+    </div>
+
+    <div class="col-md-6 mb-3">
+
+      {{form.password.label}}
+      {{form.password(class_="form-control")}}
+
+    </div>
+
+    <hr class="mb-4" />
+    {{form.submit()}}
+
+</form>
+</center>
+{% endblock %}

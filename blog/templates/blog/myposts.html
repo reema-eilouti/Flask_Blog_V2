@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+<!-- header block -->
+{% block header %}
+<h3>{% block title %}Your-Posts{% endblock %}</h3>
+{% endblock %}
+
+<!-- content block -->
+{% block content %}
+
+{% for post in posts %}
+
+<center>
+  <div class="container mt-4">
+    <div class="card" style="width: 18rem;">
+      <div class="card-body">
+        <h2 class="card-title">{{ post['title'] }}</h2>
+        <hr style="height:2px;border-width:0;color:gray;background-color:gray">
+        <h6 class="card-subtitle mb-2 text-muted">By {{session['firstname'] | title}} {{ session['lastname'] | title}}
+          on <br> {{ post['created'] }}</h6>
+        <hr style="height:2px;border-width:0;color:gray;background-color:gray">
+        <p class="card-text">{{ post['body'] }}</p>
+        <hr style="height:2px;border-width:0;color:gray;background-color:gray">
+        <a href="{{url_for('blog.edit_post',post_id=post['id'])}}" class="btn btn-secondary" title="Edit"><i
+            class="far fa-edit"></i></a>
+
+        <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#exampleModal"><i
+            class="far fa-trash-alt"></i></button>
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Delete Post</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <b> Are you sure you want to delete this post ?</b>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <a href="{{url_for('blog.delete_post',post_id=post['id'])}}" type="button" class="btn btn-danger">Yes,
+                  delete.</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <hr style="height:2px;border-width:0;color:gray;background-color:gray">
+  {% endfor %}
+  <br>
+  <a href="/profile" class="btn btn-secondary " type="button" role="button"> Your Profile </a>
+</center>
+{% endblock %}

@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+<!-- header block -->
+{% block header %}
+<h1>{% block title %}Posts{% endblock %}</h1>
+
+{% endblock %}
+
+<!-- content block -->
+{% block content %}
+
+<!-- Button trigger modal -->
+
+
+<!-- Modal -->
+
+
+<div class="div container">
+
+  <form method="POST" class="form-group">
+    <div style="height: 20%;">
+      {{ form.hidden_tag() }}
+
+      {{form.title.label}}
+      {{form.title(class_="form-control")}}
+
+      {{form.body.label}}
+      {{form.body(class_="form-control")}}
+    </div>
+    <center> {{form.submit(class_="btn btn-secondary")}} </center>
+    <hr style="height:2px;border-width:0;color:gray;background-color:gray">
+
+  </form>
+</div>
+
+{% for post in posts %}
+<article class="post">
+  <header>
+    <div>
+
+      <h1>{{ post['title'] }}</h1>
+      {% if session['role'] == 1 or session['role'] == 2 %}
+      <a style="margin-left: 90%;" href="{{url_for('blog.edit_post',post_id=post['id'])}}" title="Edit"><i
+          class="far fa-edit"></i></a>
+      {% endif %}
+
+
+      <div class="about">
+        By {{ post['firstname'] }} {{ post['lastname'] }} on {{ post['created'] }}
+      </div>
+    </div>
+  </header>
+  <p class="body">{{ post['body'] }}</p>
+  <a href="{{url_for('blog.reply_post', post_id = post['id'] )}}"><i class="fas fa-reply mx-1"></i>Reply</a>
+  <a href="{{url_for('blog.like', post_id = post['id'] )}}"><i class="fas fa-heart mt-4 mx-1" title="Like"></i></a>{{
+  post['likes'] }}
+  <a href="{{url_for('blog.dislike', post_id = post['id'] )}}"><i class="fas fa-heart-broken mx-1"
+      title="DisLike"></i></a>{{ post['dislikes'] }}
+  <a href="{{url_for('blog.favorite', post_id = post['id'] )}}"><i class="fas fa-star" title="Favorite"></i></a>
+</article>
+<hr style="height:2px;border-width:0;color:gray;background-color:gray">
+
+{% endfor %}
+
+
+{% endblock content %}

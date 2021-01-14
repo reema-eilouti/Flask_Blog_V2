@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+<!-- header block -->
+{% block header %}
+<h1>{% block title %}Users{% endblock %}</h1>
+{% endblock %}
+
+<!-- content block -->
+{% block content %}
+{% if session['role'] == 2 %} 
+{% for user in users %}
+<article class="post">
+  <header>
+    <div>
+      <h1>{{ user['username'] }}</h1>
+      <a style="margin-left: 90%;"  href="{{url_for('user.delete_user', user_id = user['id'])}}"  ><i class="far fa-trash-alt"></i></a>
+      <hr style="height:2px;border-width:0;color:gray;background-color:gray">
+
+    </div>
+  </header>
+</article>
+{% endfor %}
+
+<center><a href="/profile" class="btn btn-secondary " type="button" role="button"> Your Profile </a></center>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+<!-- header block -->
+{% block header %}
+<h1>{% block title %}Add Post{% endblock %}</h1>
+{% endblock %}
+
+<!-- content block -->
+{% block content %}
+
+<div class="div container">
+     
+  <form method="POST" class="form-group">
+      {{ form.hidden_tag() }}
+
+      {{form.title.label}}
+      {{form.title(class_="form-control")}}
+      <hr style="height:2px;border-width:0;color:gray;background-color:gray">
+      
+      {{form.body.label}}
+      {{form.body(class_="form-control")}}
+
+      <hr style="height:2px;border-width:0;color:gray;background-color:gray">
+      
+      <center>  {{form.submit(class_="btn btn-secondary")}}   </center>
+      <hr style="height:2px;border-width:0;color:gray;background-color:gray">
+
+  </form> </div>
+{% endblock %}

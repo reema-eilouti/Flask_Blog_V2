@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+<!-- header block -->
+{% block header %}
+<h1>{% block title %}Add User{% endblock %}</h1>
+{% endblock %}
+
+<!-- content block -->
+{% block content %}
+
+<div class="div container">
+     
+  <form method="POST" class="form-group">
+      {{ form.hidden_tag() }}
+
+      {{form.username.label}}
+      {{form.username(class_="form-control")}}
+      <hr style="height:2px;border-width:0;color:gray;background-color:gray">
+      
+      {{form.first_name.label}}
+      {{form.first_name(class_="form-control")}}
+      <hr style="height:2px;border-width:0;color:gray;background-color:gray">
+      
+      {{form.last_name.label}}
+      {{form.last_name(class_="form-control")}}
+
+      <hr style="height:2px;border-width:0;color:gray;background-color:gray">
+      
+        
+      {{form.password.label}}
+      {{form.password(class_="form-control")}}
+
+      <hr style="height:2px;border-width:0;color:gray;background-color:gray">
+      
+      {{form.biography.label}}
+      {{form.biography(class_="form-control")}}
+      <hr style="height:2px;border-width:0;color:gray;background-color:gray">
+
+      <center>  {{form.submit(class_="btn btn-secondary")}}   </center>
+      <hr style="height:2px;border-width:0;color:gray;background-color:gray">
+
+  </form> </div>
+{% endblock %}

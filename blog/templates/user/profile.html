@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+<!-- header block -->
+{% block header %}
+<h1>{% block title %}Profile{% endblock %}</h1>
+
+
+{% endblock %}
+
+<!-- content block -->
+{% block content %} 
+
+{% if message %}
+<div>
+  {{message}}
+</div>
+{% endif %}
+
+<center>
+<article class="post">
+  <header>
+    <div>
+
+      <div class="card" style="width: 18rem;">
+        <img class="card-img-top" src="../../static/images/136.png" alt="Card image cap">
+        <div class="card-body">
+          <h5 class="card-title">
+            <h1><b>Hello, {{ user['username'] }}</b></h1>
+          </h5>
+          <hr style="height:2px;border-width:0;color:gray;background-color:gray">
+          <p class="card-text">
+          <h1><b>First name:</b> {{ user['firstname'] | title}}</h1>
+          <hr style="height:2px;border-width:0;color:gray;background-color:gray">
+          <h1><b>Last name: </b>{{ user['lastname'] | title}}</h1>
+          <hr style="height:2px;border-width:0;color:gray;background-color:gray">
+          <h1><b>Biography:</b> {{ user['biography'] }}</h1>
+          <hr style="height:2px;border-width:0;color:gray;background-color:gray">
+          <h1><b>Posts you have published : </b>{{posts | length}}</h1>
+          <hr style="height:2px;border-width:0;color:gray;background-color:gray">
+          </p>
+          <a href="{{url_for('blog.myposts')}}" class="btn btn-secondary">Display Your Posts</a>
+        </div>
+      </div>
+
+    </div>
+
+
+  </header>
+</article>
+</center>
+
+<br> <br>
+
+<div>
+  <center>
+
+    <a href="/edit/user" class="btn btn-secondary " target="_blank" type="button" role="button"> Edit My Profile
+    </a>
+
+    <a href="/post/add" class="btn btn-secondary "  type="button" role="button"> Add Post </a>
+    {% if session['role'] == 2 %}
+    <a href="/add/user" class="btn btn-secondary " type="button" role="button"> Add User </a>
+    
+    <a href="/users" class="btn btn-secondary " target="_blank" type="button" role="button"> Display All Users </a>
+    {% endif %}
+
+  </center>
+</div>
+
+
+
+{% endblock %}
