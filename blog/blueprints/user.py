@@ -76,7 +76,7 @@ def show_session():
 
 
 @user_bp.route('/add/user', methods=['GET', 'POST'])
-@login_required
+#@login_required
 def add_user():
 
     add_user_form = AddUserForm()

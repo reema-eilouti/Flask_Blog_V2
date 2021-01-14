@@ -31,30 +31,30 @@ def create_app(test_config=None):
     def hello():
         return 'Hello, world!'
 
-    @app.route('/test-db')
-    def test_db():
-        bert = User(email='bert@sesame.com', first_name='Bert',
-                    last_name='Sesame').save()
+    @app.route('/dummy/init-db')
+    def init_db():
+        bert = User(username='hamza',password = '123', first_name='hamza',
+                    last_name='hamza').save()
 
-        cookie = User(email='cookie@monster.com', first_name='Cookie',
-                    last_name='Monster').save()
+        # cookie = User(email='cookie@monster.com', first_name='Cookie',
+        #             last_name='Monster').save()
         # Create TextPost
-        post1 = TextPost(title='Fun with MongoEngine', author=cookie)
+        # post1 = TextPost(title='Fun with MongoEngine', author=cookie)
 
-        post1.content = 'Took a look at MongoEngine today, looks pretty cool.'
-        post1.tags = ['mongodb', 'mongoengine']
-        post1.save()
+        # post1.content = 'Took a look at MongoEngine today, looks pretty cool.'
+        # post1.tags = ['mongodb', 'mongoengine']
+        # post1.save()
 
-        # Create LinkPost
-        post2 = LinkPost(title='MongoEngine Documentation', author=bert)
-        post2.link_url = 'http://docs.mongoengine.com/'
-        post2.tags = ['mongoengine']
-        post2.save()
+        # # Create LinkPost
+        # post2 = LinkPost(title='MongoEngine Documentation', author=bert)
+        # post2.link_url = 'http://docs.mongoengine.com/'
+        # post2.tags = ['mongoengine']
+        # post2.save()
 
         # for post in Post.objects:
         #     print(post.title)
 
-        return TextPost.objects()
+        return "Database initialized"
 
     # register the 'post' blueprint
     from .blueprints.post import post_bp
