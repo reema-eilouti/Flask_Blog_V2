@@ -41,6 +41,8 @@ def create_app(test_config=None):
 
         user_3 = User(username='Hesham_94',password = '1234', first_name='Hesham',
                     last_name='Marei').save()
+        post_1 = Post(author_id = "Hesham_94",created = "2020-12-30 14:09:01", title = "flask", body = "hello" ,
+         likes = "1", dislikes = "0").save()
 
         # cookie = User(email='cookie@monster.com', first_name='Cookie',
         #             last_name='Monster').save()

@@ -4,6 +4,7 @@ from functools import wraps
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, validators, TextAreaField
 from blog.forms import PostForm, ReplyPostForm, EditPostForm , EditReplyForm
+from blog.models import Post
 
 # define our blueprint
 post_bp = Blueprint('post', __name__)
@@ -35,18 +36,8 @@ def index():
 
     if request.method == "GET":
 
-        # get the DB connection
-
-        # retrieve all posts
-        posts = db.execute(
-            'SELECT p.id, title, body, created, author_id, firstname , lastname, likes, dislikes'
-            ' FROM post p JOIN user u ON p.author_id = u.id'
-            ' ORDER BY created DESC'
-        ).fetchall()
-
-        # render 'blog' blueprint with posts
-        # return render_template('blog/index.html', posts = posts )
-
+        posts = Post.objects
+                
     else :
         
         if add_post_form.validate_on_submit():
@@ -55,28 +46,16 @@ def index():
             title = add_post_form.title.data
             body = add_post_form.body.data 
 
-            # read the 'uid' from the session for the current logged in user
-            author_id = session['uid']
+            post = Post.objects(username = session['username'])
+            post.title = title
+            post.body = body
+                                    
+            flash('Your post was successfully added')
+            return redirect('/posts') 
 
-            # get the DB connection
-            db = get_db()
-            
-            # insert post into database
-            try:
-                # execute the SQL insert statement
-                db.execute("INSERT INTO post (author_id, title, body) VALUES (?, ?,?);", (author_id, title, body))
-                
-                # commit changes to the database
-                db.commit()
-                flash('You were successfully Add')
-                return redirect('/posts') 
-
-            except sqlite3.Error as er:
-                print(f"SQLite error: { (' '.join(er.args)) }")
-                return redirect("/404")
-
+    
         # if the user is not logged in, redirect to '/login' 
-        if "uid" not in session:
+        if "username" not in session:
             return redirect('/login')
         
         # else, render the template
@@ -138,7 +117,7 @@ def add_post():
     return render_template("blog/add-post.html", form = post_form)
 
 
-@post_bp.route('/post/<int:post_id>/delete', methods = ['GET', 'POST'])
+@post_bp.route('/post/<post_id>/delete', methods = ['GET', 'POST'])
 @login_required
 def delete_post(post_id):
 
@@ -151,7 +130,7 @@ def delete_post(post_id):
     return redirect(url_for("blog.myposts"))
 
 
-@post_bp.route('/post/<int:post_id>/edit', methods = ['GET', 'POST'])
+@post_bp.route('/post/<post_id>/edit', methods = ['GET', 'POST'])
 @login_required
 def edit_post(post_id):
 
@@ -198,7 +177,7 @@ def edit_post(post_id):
     return render_template("blog/edit_post.html", form = edit_post_form)
 
 
-@post_bp.route('/post/<int:post_id>/add_reply', methods = ['GET', 'POST'])
+@post_bp.route('/post/<post_id>/add_reply', methods = ['GET', 'POST'])
 @login_required
 def reply_post(post_id):
     db = get_db()
@@ -246,7 +225,7 @@ def reply_post(post_id):
     return render_template("blog/reply_post.html", mypost = mypost, post_author = post_author, form = reply_form, replies = replies, users = users)
 
 
-@post_bp.route('/post/<int:post_id>/delete_reply/<int:reply_id>', methods = ['GET', 'POST'])
+@post_bp.route('/post/<post_id>/delete_reply/<int:reply_id>', methods = ['GET', 'POST'])
 @login_required
 def delete_reply(post_id,reply_id):
 
@@ -261,7 +240,7 @@ def delete_reply(post_id,reply_id):
     return redirect(url_for('blog.reply_post', post_id = post_id))
 
 
-@post_bp.route('/post/<int:post_id>/edit_reply/<int:reply_id>', methods = ['GET', 'POST'])
+@post_bp.route('/post/<post_id>/edit_reply/<int:reply_id>', methods = ['GET', 'POST'])
 @login_required
 def edit_reply(post_id,reply_id):
 
@@ -306,7 +285,7 @@ def edit_reply(post_id,reply_id):
     return render_template("blog/edit_reply.html", form = edit_reply_form)
 
 
-@post_bp.route("/post/<int:post_id>/like")
+@post_bp.route("/post/<post_id>/like")
 @login_required
 def like(post_id):
     
@@ -374,7 +353,7 @@ def like(post_id):
         return redirect(url_for("blog.index"))
 
 
-@post_bp.route("/post/<int:post_id>/dislike")
+@post_bp.route("/post/<post_id>/dislike")
 @login_required
 def dislike(post_id):
 
@@ -447,7 +426,7 @@ def dislike(post_id):
         return redirect(url_for("blog.index"))
 
 
-@post_bp.route("/post/<int:post_id>/favorite")
+@post_bp.route("/post/<post_id>/favorite")
 @login_required            
 def favorite(post_id):
 

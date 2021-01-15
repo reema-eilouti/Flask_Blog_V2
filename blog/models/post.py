@@ -14,4 +14,7 @@ class Post(Document):
     body = StringField(required=True)
     likes = IntField(default=0)
     dislikes = IntField(default=0)
+
+
+
     
