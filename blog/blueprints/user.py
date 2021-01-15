@@ -30,39 +30,31 @@ def login_required(f):
 @user_bp.route('/change_password' , methods=['POST' , 'GET'])
 @login_required
 def change_password():
+
     change_form = ChangePasswordForm()
     
     if change_form.validate_on_submit():
         oldpassword = change_form.old_password.data
         newpassword = change_form.password.data
     
+        
+        user = User.objects(username = session['username']).first()
 
-        current_user = session['uid']
-        db = get_db()
-        user = db.execute('SELECT * FROM user WHERE id LIKE ?',(current_user,)).fetchone()
+        if oldpassword ==  user.password :
+            if oldpassword != newpassword :
 
-        if oldpassword ==  user['password']:
-            if oldpassword != newpassword:
-            
-                try:
-
-                    db.execute(f"UPDATE user SET password = '{newpassword}' WHERE id = '{current_user}' ")
-                        
-                        
-                    db.commit()
-                    
-                    return redirect("/users")
-
-                except sqlite3.Error as er:
-                    print('SQLite error: %s' % (' '.join(er.args)))
-                    return redirect("/404")
+                user.password = newpassword
+                user.save()
             
             else :
-                pass
-        
+                flash("New password can not be same the old password")
+                return redirect(url_for("user.change_password"))
 
         else:
-            pass
+            flash("Incorrect Password")
+            return redirect(url_for("user.change_password"))
+
+        return redirect(url_for("user.profile"))    
 
 
     return render_template('user/change_password.html' , form = change_form )
@@ -118,8 +110,6 @@ def profile():
 @login_required
 def edit_user():
 
-    current_user = session['uid']
-
     edit_form = EditUserInfoForm() 
     
     if request.method == "GET":
@@ -128,36 +118,26 @@ def edit_user():
         edit_form.first_name.data = session['firstname']
         edit_form.last_name.data = session['lastname']
         edit_form.biography.data = session['biography']
-        
-
-    
 
     if  edit_form.validate_on_submit():
+
         new_firstname = edit_form.first_name.data
-        new_lasttname = edit_form.last_name.data
+        new_lastname = edit_form.last_name.data
         new_bio = edit_form.biography.data
 
-        print(new_firstname)
+        user = User.objects(username = session["username"]).first()
 
-        db = get_db()
+        user.first_name = new_firstname
+        user.last_name = new_lastname
+        user.biography = new_bio 
 
-        try:
-            
-            db.execute(f"""UPDATE user
-SET firstname = '{new_firstname}', lastname = '{new_lasttname}', biography = '{new_bio}'
-WHERE id = '{current_user}' """)
-            
-            db.commit()
+        user.save()
 
-            session['firstname'] = new_firstname
-            session['lastname'] = new_lasttname
-            session['biography'] = new_bio
+        session['firstname'] = new_firstname
+        session['lastname'] = new_lastname
+        session['biography'] = new_bio
 
-            return redirect('/profile') 
-
-        except sqlite3.Error as er:
-            print('SQLite error: %s' % (' '.join(er.args)))
-            return redirect("/404")
+        return redirect('/profile') 
 
     return render_template("user/edituser.html", form = edit_form)
 

@@ -36,7 +36,6 @@ def index():
     if request.method == "GET":
 
         # get the DB connection
-        db = get_db()
 
         # retrieve all posts
         posts = db.execute(

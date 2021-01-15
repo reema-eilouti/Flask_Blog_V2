@@ -9,6 +9,6 @@ class LoginForm(FlaskForm):
 
 class ChangePasswordForm(FlaskForm):
     old_password = PasswordField("Old Password : ", [validators.InputRequired()])
-    password = PasswordField('New Password', [validators.InputRequired(), validators.EqualTo('confirm', message='Passwords must match')])
+    password = PasswordField('New Password', [validators.InputRequired(), validators.EqualTo('confirm', message='The new password and the confirm password must match')])
     confirm = PasswordField("Confirm Password : ", [validators.InputRequired()])
     submit = SubmitField("Change Password")
