@@ -33,8 +33,14 @@ def create_app(test_config=None):
 
     @app.route('/dummy/init-db')
     def init_db():
-        bert = User(username='hamza',password = '123', first_name='hamza',
-                    last_name='hamza').save()
+        user_1 = User(username='hamza',password = '1234', first_name='hamza',
+                    last_name='Rdaideh').save()
+
+        user_2 = User(username='Reema_95',password = '1234', first_name='Reema',
+                    last_name='Eilouti').save()
+
+        user_3 = User(username='Hesham_94',password = '1234', first_name='Hesham',
+                    last_name='Marei').save()
 
         # cookie = User(email='cookie@monster.com', first_name='Cookie',
         #             last_name='Monster').save()

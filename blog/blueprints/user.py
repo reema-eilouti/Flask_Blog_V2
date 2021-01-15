@@ -146,24 +146,18 @@ def edit_user():
 @user_bp.route('/users')
 @login_required
 def get_users():
-    # get the DB connection
-    db = get_db()
-
-    # get all users from the db
-    users = db.execute('select * from user').fetchall()
+    
+    users = User.objects
 
     # render 'list.html' blueprint with users
     return render_template('user/list.html', users=users)
 
 
 
-@user_bp.route('/users/<int:user_id>')
+@user_bp.route('/users/<username>')
 @login_required
-def delete_user(user_id):
-    # get the DB connection
-    db = get_db()
+def delete_user(username):
 
-    db.execute(f"DELETE FROM user WHERE id = {user_id} ")
-    db.commit()
-
+    User.objects(username = username).first().delete()
+    
     return redirect(url_for("user.get_users"))
