@@ -39,14 +39,14 @@
     <div>
 
       <h1>{{ post.title }}</h1>
-      {% if session['role'] == 1 or session['role'] == 2 %}
+      {% if session['role'] == 1 or session['role'] == 2 or session['role'] == 0 %}
       <a style="margin-left: 90%;" href="{{url_for('post.edit_post',post_id = post.id)}}" title="Edit"><i
           class="far fa-edit"></i></a>
       {% endif %}
 
 
       <div class="about">
-        By {{ post.firstname }} {{ post.lastname }} on {{ post.created }}
+        By {{ post.author.first_name }} {{ post.author.last_name }} on {{ post.created }}
       </div>
     </div>
   </header>

@@ -33,17 +33,22 @@ def create_app(test_config=None):
 
     @app.route('/dummy/init-db')
     def init_db():
-        user_1 = User(username='hamza',password = '1234', first_name='hamza',
+        user_1 = User(username='hamza_96',password = '1234', first_name='Hamza',
                     last_name='Rdaideh').save()
 
-        user_2 = User(username='Reema_95',password = '1234', first_name='Reema',
+        user_2 = User(username='reema_95',password = '1234', first_name='Reema',
                     last_name='Eilouti').save()
 
-        user_3 = User(username='Hesham_94',password = '1234', first_name='Hesham',
+        user_3 = User(username='hesham_94',password = '1234', first_name='Hesham',
                     last_name='Marei').save()
-        post_1 = Post(author_id = "Hesham_94",created = "2020-12-30 14:09:01", title = "flask", body = "hello" ,
-         likes = "1", dislikes = "0").save()
 
+
+
+        reply_1 = Reply(author = user_3 , body = "Hello" , created = "2020-12-30 14:09:01")
+        reply_2 = Reply(author = user_2 , body = "Hi" , created = "2020-12-30 14:09:01")
+        
+        post_1 = Post(author = user_3 ,created = "2020-12-30 14:09:01", title = "flask", body = "hello" ,
+         likes = "1", dislikes = "0" , comments = [reply_1 , reply_2]).save()
         # cookie = User(email='cookie@monster.com', first_name='Cookie',
         #             last_name='Monster').save()
         # Create TextPost

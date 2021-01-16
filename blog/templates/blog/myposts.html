@@ -21,7 +21,7 @@
         <hr style="height:2px;border-width:0;color:gray;background-color:gray">
         <p class="card-text">{{ post['body'] }}</p>
         <hr style="height:2px;border-width:0;color:gray;background-color:gray">
-        <a href="{{url_for('blog.edit_post',post_id=post['id'])}}" class="btn btn-secondary" title="Edit"><i
+        <a href="{{url_for('post.edit_post',post_id=post.id)}}" class="btn btn-secondary" title="Edit"><i
             class="far fa-edit"></i></a>
 
         <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#exampleModal"><i
@@ -38,7 +38,7 @@
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <a href="{{url_for('blog.delete_post',post_id=post['id'])}}" type="button" class="btn btn-danger">Yes,
+                <a href="{{url_for('post.delete_post',post_id=post['id'])}}" type="button" class="btn btn-danger">Yes,
                   delete.</a>
               </div>
             </div>
