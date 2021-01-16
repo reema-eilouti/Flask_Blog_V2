@@ -14,9 +14,10 @@
   <div class="container mt-4">
     <div class="card" style="width: 18rem;">
       <div class="card-body">
-        <h2 class="card-title">{{ mypost['title'] }}</h2>        
-        <hr style="height:2px;border-width:0;color:gray;background-color:gray">  
-        <h6 class="card-subtitle mb-2 text-muted">By {{mypost.author.first_name | title}} {{mypost.author.last_name | title}} on <br> {{ mypost['created'] }}</h6>
+        <h2 class="card-title">{{ mypost['title'] }}</h2>
+        <hr style="height:2px;border-width:0;color:gray;background-color:gray">
+        <h6 class="card-subtitle mb-2 text-muted">By {{mypost.author.first_name | title}} {{mypost.author.last_name |
+          title}} on <br> {{ mypost['created'] }}</h6>
         <hr style="height:2px;border-width:0;color:gray;background-color:gray">
         <p class="card-text">{{ mypost['body'] }}</p>
         <hr style="height:2px;border-width:0;color:gray;background-color:gray">
@@ -40,8 +41,8 @@
     <div class="card-body">
       <p class="card-text">{{ reply['body'] }}</p>
       <hr style="height:2px;border-width:0;color:gray;background-color:#808080">
-      <a href="{{url_for('post.edit_reply',post_id = mypost['id'])}}" class="card-link"
-        title="Edit"><i class="far fa-edit"></i></a>    
+      <a href="{{url_for('post.edit_reply',post_id = mypost['id'])}}" class="card-link" title="Edit"><i
+          class="far fa-edit"></i></a>
       <a type="button" class="card-link" data-bs-toggle="modal" data-bs-target="#exampleModal"><i
           class="far fa-trash-alt"></i></a>
 
@@ -57,15 +58,14 @@
               <b>Are you sure you want to delete this reply ?</b>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-              <a href="{{url_for('post.delete_reply',post_id = mypost['id'] , reply_id = mypost.comments[1].id)}}" type="button"
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>              
+              <a href="{{url_for('post.delete_reply',post_id = mypost['id'] , reply_id = mypost.comments.username)}}" type="button"
                 class="btn btn-danger">Save changes</a>
-            </div>
+               </div>
           </div>
         </div>
       </div>
     </div>
-
   </div>
   {% endfor %}
 

@@ -97,7 +97,7 @@ def profile():
 
     user = User.objects(username = session['uid'])
 
-    posts = Post.objects(author_id = session['uid']).order_by('-created')
+    posts = Post.objects(author = session['uid']).order_by('-created')
 
         
     flash('You were successfully logged in')

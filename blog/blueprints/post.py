@@ -155,18 +155,21 @@ def reply_post(post_id):
     # render the template
     return render_template("blog/reply_post.html", mypost = post, form = reply_form)
 
-
+# unfinished function ***** 
 @post_bp.route('/post/<post_id>/delete_reply/<reply_id>', methods=['GET', 'POST'])
 @login_required
 def delete_reply(post_id, reply_id):
 
     # delete from DB
-    Reply.objects(id = reply_id).delete().first()
     
-    return redirect(url_for('blog.reply_post', post_id=post_id))
+    Post.objects(id = post_id).update_one(author = reply_id).first()
+    print(reply_id)
+    print("heello")
+    
+    return redirect(url_for('post.reply_post', post_id=post_id))
+# unfinished function ***** 
 
-
-@post_bp.route('/post/<post_id>/edit_reply', methods=['GET', 'POST'])
+@post_bp.route('/post/<post_id>/edit_reply/<reply_id>', methods=['GET', 'POST'])
 @login_required
 def edit_reply(post_id, reply_id):
 
