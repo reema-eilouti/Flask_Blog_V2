@@ -59,7 +59,7 @@
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>              
-              <a href="{{url_for('post.delete_reply',post_id = mypost['id'] , reply_id = mypost.comments.username)}}" type="button"
+              <a href="{{url_for('post.delete_reply',post_id = mypost['id'] , reply_id = mypost.comments)}}" type="button"
                 class="btn btn-danger">Save changes</a>
                </div>
           </div>
@@ -67,7 +67,6 @@
       </div>
     </div>
   </div>
-  {% endfor %}
 
 
 
@@ -75,6 +74,12 @@
 </div>
 
 <hr style="height:2px;border-width:0;color:#808080;background-color:gray">
+
+{% endfor %}
+
+{% for reply in replies %}
+{{reply.username}} hello
+{% endfor %}
 
 <div class="div container">
   <center>

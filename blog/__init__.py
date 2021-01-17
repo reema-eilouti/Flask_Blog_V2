@@ -44,8 +44,8 @@ def create_app(test_config=None):
 
 
 
-        reply_1 = Reply(author = user_3 , body = "Hello" , created = "2020-12-30 14:09:01")
-        reply_2 = Reply(author = user_2 , body = "Hi" , created = "2020-12-30 14:09:01")
+        reply_1 = Reply(identification = 1,author = user_3 , body = "Hello" , created = "2020-12-30 14:09:01")
+        reply_2 = Reply(identification = 2,author = user_2 , body = "Hi" , created = "2020-12-30 14:09:01")
         
         post_1 = Post(author = user_3 ,created = "2020-12-30 14:09:01", title = "flask", body = "hello" ,
          likes = "1", dislikes = "0" , comments = [reply_1 , reply_2]).save()

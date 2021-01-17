@@ -9,6 +9,7 @@ class Reply(EmbeddedDocument):
     meta = {'collection': 'Replies'}
 
     # define class fields
+    identification = IntField(primary_key=True)
     author = ReferenceField(User)
     created = DateTimeField(default=datetime.datetime.utcnow)
     body = StringField(required=True)

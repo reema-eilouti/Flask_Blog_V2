@@ -11,7 +11,7 @@ class User(Document):
     first_name = StringField(max_length=50)
     last_name = StringField(max_length=50)
     biography = StringField(max_length=50)
-    role = IntField(default = 0)
+    role = IntField(default = 0) 
 
     def authenticate(self, username , password):
         pass

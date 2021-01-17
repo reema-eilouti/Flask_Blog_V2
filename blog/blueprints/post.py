@@ -18,10 +18,7 @@ def login_required(f):
             return f(*args, **kwargs)
 
         else:
-
             return redirect('/login')
-            # , next=request.url )
-
     return check
 
 
@@ -130,19 +127,26 @@ def reply_post(post_id):
     reply_form = ReplyPostForm()
 
     if reply_form.validate_on_submit():
-
-        #load post and user
+       
         post = Post.objects(id = post_id).first()
+        
         user = User.objects(username = session['username']).first()
 
-        #create instance of our comment
-        reply = Reply(body = reply_form.body.data , author = user)
+        identifications = []
+
+        for i in range(len(post.comments)):
+
+            identifications.append(post.comments[i].identification)
+
+
+        maximum_id = max(identifications)
+
+        reply = Reply(identification = maximum_id + 1  ,body = reply_form.body.data , author = user)
         
-        #add comment to post comments
         post.comments.append(reply)
 
-        #save the post
         post.save()
+
         return redirect(url_for('post.reply_post', post_id=post_id))
 
   
@@ -151,6 +155,7 @@ def reply_post(post_id):
     # retrieve post
     post = Post.objects(id = post_id).first()
     
+
    
     # render the template
     return render_template("blog/reply_post.html", mypost = post, form = reply_form)
@@ -162,14 +167,16 @@ def delete_reply(post_id, reply_id):
 
     # delete from DB
     
-    Post.objects(id = post_id).update_one(author = reply_id).first()
+    post = Post.objects(id = post_id).first()
+    post.comments.objects(reply_id = reply_id).first().delete()
+    # .update_one(author = reply_id).first()
     print(reply_id)
     print("heello")
     
     return redirect(url_for('post.reply_post', post_id=post_id))
 # unfinished function ***** 
 
-@post_bp.route('/post/<post_id>/edit_reply/<reply_id>', methods=['GET', 'POST'])
+@post_bp.route('/post/<post_id>/edit_reply', methods=['GET', 'POST'])
 @login_required
 def edit_reply(post_id, reply_id):
 
