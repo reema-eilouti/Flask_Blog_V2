@@ -138,7 +138,6 @@ def reply_post(post_id):
 
             identifications.append(post.comments[i].identification)
 
-
         maximum_id = max(identifications)
 
         reply = Reply(identification = maximum_id + 1  ,body = reply_form.body.data , author = user)
@@ -164,17 +163,16 @@ def reply_post(post_id):
 @post_bp.route('/post/<post_id>/delete_reply/<reply_id>', methods=['GET', 'POST'])
 @login_required
 def delete_reply(post_id, reply_id):
-
-    # delete from DB
     
+    integer = int(reply_id)
     post = Post.objects(id = post_id).first()
-    post.comments.objects(reply_id = reply_id).first().delete()
-    # .update_one(author = reply_id).first()
-    print(reply_id)
-    print("heello")
+    
+    # post.comments[integer](identification = reply_id).first().delete()
+
+    Reply.objects(identification = reply_id).delete()
     
     return redirect(url_for('post.reply_post', post_id=post_id))
-# unfinished function ***** 
+ 
 
 @post_bp.route('/post/<post_id>/edit_reply', methods=['GET', 'POST'])
 @login_required

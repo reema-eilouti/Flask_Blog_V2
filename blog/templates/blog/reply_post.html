@@ -43,11 +43,12 @@
       <hr style="height:2px;border-width:0;color:gray;background-color:#808080">
       <a href="{{url_for('post.edit_reply',post_id = mypost['id'])}}" class="card-link" title="Edit"><i
           class="far fa-edit"></i></a>
-      <a type="button" class="card-link" data-bs-toggle="modal" data-bs-target="#exampleModal"><i
+      <a href="{{url_for('post.delete_reply',post_id = mypost['id'] , reply_id = mypost.comments[loop.index - 1].identification)}}"
+        type="button" class="card-link"><i
           class="far fa-trash-alt"></i></a>
 
       <!-- Modal -->
-      <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <!-- <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
@@ -59,12 +60,12 @@
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>              
-              <a href="{{url_for('post.delete_reply',post_id = mypost['id'] , reply_id = mypost.comments)}}" type="button"
+              <a type="button"
                 class="btn btn-danger">Save changes</a>
                </div>
           </div>
         </div>
-      </div>
+      </div> -->
     </div>
   </div>
 
@@ -77,9 +78,7 @@
 
 {% endfor %}
 
-{% for reply in replies %}
-{{reply.username}} hello
-{% endfor %}
+
 
 <div class="div container">
   <center>
