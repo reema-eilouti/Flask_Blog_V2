@@ -33,11 +33,11 @@ def create_app(test_config=None):
 
     @app.route('/dummy/init-db')
     def init_db():
-        user_1 = User(username='hamza_96',password = '1234', first_name='Hamza', last_name='Rdaideh', favorite_posts = []).save()
+        user_1 = User(username='hamza_96',password = '1234', first_name='Hamza', last_name='Rdaideh').save()
 
-        user_2 = User(username='reema_95',password = '1234', first_name='Reema', last_name='Eilouti', favorite_posts = []).save()
+        user_2 = User(username='reema_95',password = '1234', first_name='Reema', last_name='Eilouti').save()
 
-        user_3 = User(username='hesham_94',password = '1234', first_name='Hesham', last_name='Marei', favorite_posts = []).save()
+        user_3 = User(username='hesham_94',password = '1234', first_name='Hesham', last_name='Marei').save()
 
 
 
@@ -54,7 +54,10 @@ def create_app(test_config=None):
          likes = "0", dislikes = "0" , comments = []).save()
 
         post_3 = Post(author = user_1 ,created = "2020-12-30 14:09:01", title = "POST3", body = "mongodb is cool" ,
-         likes = "0", dislikes = "0" , comments = []).save()
+         likes = "1", dislikes = "0" , comments = []).save()
+        
+
+        reaction_1 = Reaction(user = user_2 , post = post_3, like = True, dislike = False ).save()
 
 
         return "Database initialized"

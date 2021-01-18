@@ -4,7 +4,7 @@ from functools import wraps
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, validators, TextAreaField
 from blog.forms import PostForm, ReplyPostForm, EditPostForm, EditReplyForm
-from blog.models import Post , Reply , User
+from blog.models import Post , Reply , User , Reaction
 
 # define our blueprint
 post_bp = Blueprint('post', __name__)
@@ -215,35 +215,29 @@ def edit_reply(post_id, reply_id):
 @post_bp.route("/post/<post_id>/like")
 @login_required
 def like(post_id):
+    user = User.objects(username = session['username'])
 
-    db = get_db()
+    post = Post.objects(id = post_id).first()
 
-    num_of_likes = db.execute(
-        "SELECT likes FROM post WHERE id LIKE ?", (post_id,)).fetchone()
-    total_likes = num_of_likes['likes']
+    num_of_likes = post.likes
 
-    num_of_dislikes = db.execute(
-        "SELECT dislikes FROM post WHERE id LIKE ?", (post_id,)).fetchone()
-    total_dislikes = num_of_dislikes['dislikes']
+    num_of_dislikes = post.dislikes
 
-    reaction_id = db.execute(
-        f"SELECT * FROM reaction WHERE user_id = {session['uid']} AND post_id = {post_id}").fetchone()
+    reaction_id = Reaction.objects(user = session['username'] , post = post_id).first()
+
+    print(reaction_id)  
+    print("hi000000000") 
 
     if reaction_id == None:
+        
+        post.likes = num_of_likes +1 
 
-        db = get_db()
+        reaction = Reaction.objects(user = session['username'] , post = post_id , like = True , dislike = False).save()        
+        
+        post.save()
+        
 
-        total_likes += 1
-
-        db.execute(
-            f"UPDATE post SET likes = {total_likes} WHERE id = {post_id}")
-
-        db.execute(f"INSERT INTO reaction (post_id, user_id, like, dislike) VALUES (?, ?, ?, ?);",
-                   (post_id, session['uid'], 1, 0))
-
-        db.commit()
-
-        return redirect(url_for("blog.index"))
+        return redirect(url_for("post.index"))
 
     elif reaction_id['favorite'] == 1 and reaction_id['like'] == None and reaction_id['dislike'] == None:
 

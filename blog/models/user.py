@@ -1,4 +1,6 @@
 from mongoengine import *
+from .reply import *
+from .post import *
 
 
 class User(Document):
@@ -12,7 +14,7 @@ class User(Document):
     last_name = StringField(max_length = 50)
     biography = StringField(max_length = 50)
     role = IntField(default = 0) 
-    favorite_posts = ListField(EmbeddedDocumentField(Post))
+    # favorite_posts = ListField(DynamicField(Post))
 
     def authenticate(self, username, password):
         pass
