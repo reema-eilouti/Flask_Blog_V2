@@ -117,7 +117,7 @@ def edit_post(post_id):
         return redirect(url_for("post.myposts"))
 
     # else, render the template
-    return render_template("blog/edit_post.html", form=edit_post_form)
+    return render_template("blog/edit_post.html", form = edit_post_form)
 
 
 @post_bp.route('/post/<post_id>/add_reply', methods=['GET', 'POST'])
@@ -164,57 +164,51 @@ def reply_post(post_id):
 @login_required
 def delete_reply(post_id, reply_id):
     
-    integer = int(reply_id)
+    reply_id_int = int(reply_id)
+
     post = Post.objects(id = post_id).first()
     
-    # post.comments[integer](identification = reply_id).first().delete()
+    post.comments.pop(reply_id_int - 1)
 
-    Reply.objects(identification = reply_id).delete()
-    
-    return redirect(url_for('post.reply_post', post_id=post_id))
+    post.save()
+
+    return redirect(url_for('post.reply_post', post_id = post_id))
  
 
-@post_bp.route('/post/<post_id>/edit_reply', methods=['GET', 'POST'])
+@post_bp.route('/post/<post_id>/edit_reply/<reply_id>', methods=['GET', 'POST'])
 @login_required
 def edit_reply(post_id, reply_id):
 
     edit_reply_form = EditReplyForm()
 
+    post = Post.objects(id = post_id).first()
+
+    reply_id_int = int(reply_id)
+
+    reply_body = post.comments[reply_id_int -1].body
+
+
+
     if request.method == "GET":
 
-        db = get_db()
+        edit_reply_form.new_body.data = reply_body
 
-        current_reply = db.execute(
-            f"select * from reply WHERE id = {reply_id}").fetchone()
 
-        edit_reply_form.new_body.data = current_reply['body']
+
 
     if edit_reply_form.validate_on_submit():
-        # read post values from the form
-        new_body = edit_reply_form.new_body.data
+        
+        reply_body = edit_reply_form.new_body.data
 
-        # get the DB connection
-        db = get_db()
+        post.comments[reply_id_int -1].body = reply_body
 
-        try:
+        post.save()
 
-            db.execute(
-                f"UPDATE reply SET body = '{new_body}' WHERE id = '{reply_id}' ")
+        return redirect(url_for("post.reply_post", post_id=post_id))
 
-            # commit changes to the database
-            db.commit()
 
-            return redirect(url_for("blog.reply_post", post_id=post_id))
 
-        except sqlite3.Error as er:
-            print(f"SQLite error: { (' '.join(er.args)) }")
-            return redirect("/404")
 
-    # if the user is not logged in, redirect to '/login'
-    if "uid" not in session:
-        return redirect('/login')
-
-    # else, render the template
     return render_template("blog/edit_reply.html", form=edit_reply_form)
 
 

@@ -34,43 +34,17 @@
   {% for reply in mypost.comments %}
   <div class="card text-dark bg-light mb-3" style="max-width: 60rem;">
 
-    <div class="card-header"><b>{{reply.author.username}}</b><i> at :
-        {{reply['created']}} </i>
-    </div>
-
+    <div class="card-header"><b>{{reply.author.username}}</b><i> at : {{reply['created']}}</i></div>
     <div class="card-body">
       <p class="card-text">{{ reply['body'] }}</p>
       <hr style="height:2px;border-width:0;color:gray;background-color:#808080">
-      <a href="{{url_for('post.edit_reply',post_id = mypost['id'])}}" class="card-link" title="Edit"><i
-          class="far fa-edit"></i></a>
+      <a href="{{url_for('post.edit_reply',post_id = mypost['id'], reply_id = mypost.comments[loop.index - 1].identification)}}"
+        class="card-link" title="Edit"><i class="far fa-edit"></i></a>
       <a href="{{url_for('post.delete_reply',post_id = mypost['id'] , reply_id = mypost.comments[loop.index - 1].identification)}}"
-        type="button" class="card-link"><i
-          class="far fa-trash-alt"></i></a>
-
-      <!-- Modal -->
-      <!-- <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLabel">Delete Reply</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-              <b>Are you sure you want to delete this reply ?</b>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>              
-              <a type="button"
-                class="btn btn-danger">Save changes</a>
-               </div>
-          </div>
-        </div>
-      </div> -->
+        type="button" class="card-link"><i class="far fa-trash-alt"></i></a>
     </div>
+
   </div>
-
-
-
 
 </div>
 

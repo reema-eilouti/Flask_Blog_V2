@@ -33,41 +33,32 @@ def create_app(test_config=None):
 
     @app.route('/dummy/init-db')
     def init_db():
-        user_1 = User(username='hamza_96',password = '1234', first_name='Hamza',
-                    last_name='Rdaideh').save()
+        user_1 = User(username='hamza_96',password = '1234', first_name='Hamza', last_name='Rdaideh', favorite_posts = []).save()
 
-        user_2 = User(username='reema_95',password = '1234', first_name='Reema',
-                    last_name='Eilouti').save()
+        user_2 = User(username='reema_95',password = '1234', first_name='Reema', last_name='Eilouti', favorite_posts = []).save()
 
-        user_3 = User(username='hesham_94',password = '1234', first_name='Hesham',
-                    last_name='Marei').save()
+        user_3 = User(username='hesham_94',password = '1234', first_name='Hesham', last_name='Marei', favorite_posts = []).save()
 
 
 
-        reply_1 = Reply(identification = 1,author = user_3 , body = "Hello" , created = "2020-12-30 14:09:01")
-        reply_2 = Reply(identification = 2,author = user_2 , body = "Hi" , created = "2020-12-30 14:09:01")
+        reply_1 = Reply(identification = 1, author = user_3 , body = "Hello" , created = "2020-12-30 14:09:01")
+
+        reply_2 = Reply(identification = 2, author = user_2 , body = "Hi" , created = "2020-12-30 14:09:01")
+
         
-        post_1 = Post(author = user_3 ,created = "2020-12-30 14:09:01", title = "flask", body = "hello" ,
-         likes = "1", dislikes = "0" , comments = [reply_1 , reply_2]).save()
-        # cookie = User(email='cookie@monster.com', first_name='Cookie',
-        #             last_name='Monster').save()
-        # Create TextPost
-        # post1 = TextPost(title='Fun with MongoEngine', author=cookie)
 
-        # post1.content = 'Took a look at MongoEngine today, looks pretty cool.'
-        # post1.tags = ['mongodb', 'mongoengine']
-        # post1.save()
+        post_1 = Post(author = user_3 ,created = "2020-12-30 14:09:01", title = "POST1", body = "hello" ,
+         likes = "0", dislikes = "0" , comments = [reply_1 , reply_2]).save()
 
-        # # Create LinkPost
-        # post2 = LinkPost(title='MongoEngine Documentation', author=bert)
-        # post2.link_url = 'http://docs.mongoengine.com/'
-        # post2.tags = ['mongoengine']
-        # post2.save()
+        post_2 = Post(author = user_2 ,created = "2020-12-30 14:09:01", title = "POST2", body = "testing" ,
+         likes = "0", dislikes = "0" , comments = []).save()
 
-        # for post in Post.objects:
-        #     print(post.title)
+        post_3 = Post(author = user_1 ,created = "2020-12-30 14:09:01", title = "POST3", body = "mongodb is cool" ,
+         likes = "0", dislikes = "0" , comments = []).save()
+
 
         return "Database initialized"
+
 
     # register the 'post' blueprint
     from .blueprints.post import post_bp
