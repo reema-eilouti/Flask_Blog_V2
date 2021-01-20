@@ -5,7 +5,7 @@ from .user import User
 import datetime
 
 
-class Post(Document):
+class Post(DynamicDocument):
     # define class metadata
     meta = {'collection': 'Posts'}
 

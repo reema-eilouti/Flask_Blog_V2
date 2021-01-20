@@ -3,7 +3,7 @@ from .reply import *
 from .post import *
 
 
-class User(Document):
+class User(DynamicDocument):
     # define class metadata
     meta = {'collection': 'users'}
 
