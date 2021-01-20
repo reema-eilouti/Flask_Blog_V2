@@ -165,12 +165,19 @@ def reply_post(post_id):
 def delete_reply(post_id, reply_id):
     
     reply_id_int = int(reply_id)
-
-    post = Post.objects(id = post_id).first()
+    # post_comments = Post.comments
     
-    post.comments.pop(reply_id_int - 1)
+    # post = Post.objects(id = post_id).first()
+    
+    # post.comments.remove(Reply.objects(identification = reply_id).first())
+    Post.objects(id = post_id).update_one(pull__comments__identification =  reply_id_int)
 
-    post.save()
+    # another solution for filtering
+    # Post.objects(id = post_id).update_one(pull__comments__identification = Reply(identification = reply_id_int).identification)
+    # $pull: {'content.assets': {'_id': ObjectId('4fc63def5b20fb722900010e')}
+    
+
+    
 
     return redirect(url_for('post.reply_post', post_id = post_id))
  

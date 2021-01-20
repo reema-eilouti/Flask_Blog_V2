@@ -38,9 +38,9 @@
     <div class="card-body">
       <p class="card-text">{{ reply['body'] }}</p>
       <hr style="height:2px;border-width:0;color:gray;background-color:#808080">
-      <a href="{{url_for('post.edit_reply',post_id = mypost['id'], reply_id = mypost.comments[loop.index - 1].identification)}}"
+      <a href="{{url_for('post.edit_reply',post_id = mypost['id'], reply_id = reply.identification)}}"
         class="card-link" title="Edit"><i class="far fa-edit"></i> {{reply.identification}} </a>
-      <a href="{{url_for('post.delete_reply',post_id = mypost['id'] , reply_id = mypost.comments[loop.index - 1].identification)}}"
+      <a href="{{url_for('post.delete_reply',post_id = mypost['id'] , reply_id = reply.identification)}}"
         type="button" class="card-link"><i class="far fa-trash-alt"></i></a>
     </div>
 
