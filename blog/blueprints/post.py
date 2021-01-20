@@ -232,7 +232,7 @@ def like(post_id):
         
         post.likes = num_of_likes +1 
 
-        reaction = Reaction.objects(user = session['username'] , post = post_id , like = True , dislike = False).save()        
+        reaction = Reaction(user = session['username'] , post = post_id , like = True , dislike = False).save()        
         
         post.save()
         
