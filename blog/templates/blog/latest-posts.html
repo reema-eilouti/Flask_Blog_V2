@@ -2,7 +2,7 @@
 
 <!-- header block -->
 {% block header %}
-<h1>{% block title %}Posts{% endblock %}</h1>
+<h1>{% block title %}Latest-Posts{% endblock %}</h1>
 
 {% endblock %}
 
@@ -15,23 +15,6 @@
 <!-- Modal -->
 
 
-<div class="div container">
-
-  <form method="POST" class="form-group">
-    <div style="height: 20%;">
-      {{ form.hidden_tag() }}
-
-      {{form.title.label}}
-      {{form.title(class_="form-control")}}
-
-      {{form.body.label}}
-      {{form.body(class_="form-control")}}
-    </div>
-    <center> {{form.submit(class_="btn btn-secondary")}} </center>
-    <hr style="height:2px;border-width:0;color:gray;background-color:gray">
-
-  </form>
-</div>
 
 {% for post in posts %}
 <article class="post">
@@ -39,7 +22,7 @@
     <div>
 
       <h1>{{ post.title }}</h1>
-      {% if session['role'] == 1 or session['role'] == 2 %}
+      {% if session['role'] == 1 or session['role'] == 2 or session['role'] == 0 %}
       <a style="margin-left: 90%;" href="{{url_for('post.edit_post',post_id = post.id)}}" title="Edit"><i
           class="far fa-edit"></i></a>
       {% endif %}
@@ -59,6 +42,7 @@
   <a href="{{url_for('post.favorite', post_id = post.id )}}"><i class="fas fa-star" title="Favorite"></i></a>
 </article>
 <hr style="height:2px;border-width:0;color:gray;background-color:gray">
+
 
 {% endfor %}
 

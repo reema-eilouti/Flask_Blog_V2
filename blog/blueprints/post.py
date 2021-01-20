@@ -50,6 +50,17 @@ def index():
     return render_template("blog/index.html", form=add_post_form, posts=posts)
 
 
+
+@post_bp.route('/latest-posts', methods=['GET', 'POST'])
+@login_required
+def latest_posts():
+
+    posts = Post.objects().order_by('-created')
+    
+    return render_template("blog/latest-posts.html" , posts=posts)
+
+
+
 @post_bp.route('/myposts')
 @login_required
 def myposts():

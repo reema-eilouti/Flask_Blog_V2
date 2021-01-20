@@ -39,7 +39,9 @@ def create_app(test_config=None):
 
         user_3 = User(username='hesham_94',password = '1234', first_name='Hesham', last_name='Marei').save()
 
+        user_4 = User(username='Editor-1',password = '1234', first_name='Editor', last_name='Editor' , role = 1).save()
 
+        user_5 = User(username='Admin',password = '1234', first_name='Admin', last_name='Admin' , role = 2).save()
 
         reply_1 = Reply(identification = 1, author = user_3 , body = "Hello" , created = "2020-12-30 14:09:01")
 
@@ -47,13 +49,13 @@ def create_app(test_config=None):
 
         
 
-        post_1 = Post(author = user_3 ,created = "2020-12-30 14:09:01", title = "POST1", body = "hello" ,
+        post_1 = Post(author = user_3 ,created = "2009-12-30 14:09:01", title = "POST1", body = "hello" ,
          likes = "0", dislikes = "0" , comments = [reply_1 , reply_2]).save()
 
-        post_2 = Post(author = user_2 ,created = "2020-12-30 14:09:01", title = "POST2", body = "testing" ,
+        post_2 = Post(author = user_2 ,created = "2021-12-22 10:09:01", title = "POST2", body = "testing" ,
          likes = "0", dislikes = "0" , comments = []).save()
 
-        post_3 = Post(author = user_1 ,created = "2020-12-30 14:09:01", title = "POST3", body = "mongodb is cool" ,
+        post_3 = Post(author = user_1 ,created = "2020-1-3 04:09:01", title = "POST3", body = "mongodb is cool" ,
          likes = "1", dislikes = "0" , comments = []).save()
         
 

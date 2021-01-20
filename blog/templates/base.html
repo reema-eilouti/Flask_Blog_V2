@@ -21,8 +21,12 @@
   <nav>
     <h1><a href="/"> <i class="fas fa-home"></i> Flask Blog  </a></h1>
 
+
     {% if session['uid'] %}
 
+    <a href="{{url_for('post.latest_posts')}}" title="Latest-Posts" class="btn btn-secondary btn-sm mx-1" type="button" > <i class="fas fa-sort"></i> </a>
+
+    
     <a href="/profile" class="btn btn-secondary btn-sm mx-1" title="Your Profile" type="button" role="button"> <i class="fas fa-user-alt"></i></a>
 
     <a class="btn btn-secondary btn-sm mx-1" title="Change Password" href="/change_password" ;"> <i class="fas fa-exchange-alt"></i></a>

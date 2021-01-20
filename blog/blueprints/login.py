@@ -23,7 +23,7 @@ def login():
 
         # if user  != None:
         # check if credentials are valid
-        if user and user.password == password:
+        if user and user.authenticate(username, password) :
             # store the user ID in the session
             session['uid'] = str(user.id)
             session['username'] = user.username

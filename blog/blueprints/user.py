@@ -40,20 +40,24 @@ def change_password():
     
         
         user = User.objects(username = session['username']).first()
+        
+        if user :
 
-        if oldpassword ==  user.password :
-            if oldpassword != newpassword :
-
-                user.password = newpassword
-                user.save()
-            
-            else :
+            if oldpassword == newpassword :
                 flash("New password can not be same the old password")
                 return redirect(url_for("user.change_password"))
 
-        else:
-            flash("Incorrect Password")
-            return redirect(url_for("user.change_password"))
+
+            elif oldpassword !=  user.password:
+                flash("Incorrect Password")
+                return redirect(url_for("user.change_password"))
+
+            else :
+
+                user.change_password(oldpassword, newpassword)
+                user.save()
+                flash("Your password has been successfully changed.")
+
 
         return redirect(url_for("user.profile"))    
 
