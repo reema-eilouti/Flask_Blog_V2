@@ -41,18 +41,12 @@ def index():
             title = add_post_form.title.data
             body = add_post_form.body.data
 
-            post = Post.objects(username=session['username'])
-            post.title = title
-            post.body = body
+            Post(author=session['username'], title=title, body=body).save()
 
             flash('Your post was successfully added')
             return redirect('/posts')
 
-        # if the user is not logged in, redirect to '/login'
-        if "username" not in session:
-            return redirect('/login')
-
-        # else, render the template
+        #render the template
     return render_template("blog/index.html", form=add_post_form, posts=posts)
 
 
@@ -77,7 +71,7 @@ def add_post():
         title = post_form.title.data
         body = post_form.body.data
 
-        post = Post(author=session['username'], title=title, body=body).save()
+        Post(author=session['username'], title=title, body=body).save()
 
         flash('You were successfully Add')
         return redirect('/posts')
@@ -159,17 +153,12 @@ def reply_post(post_id):
     # render the template
     return render_template("blog/reply_post.html", mypost = post, form = reply_form)
 
-# unfinished function ***** 
 @post_bp.route('/post/<post_id>/delete_reply/<reply_id>', methods=['GET', 'POST'])
 @login_required
 def delete_reply(post_id, reply_id):
     
     reply_id_int = int(reply_id)
-    # post_comments = Post.comments
-    
-    # post = Post.objects(id = post_id).first()
-    
-    # post.comments.remove(Reply.objects(identification = reply_id).first())
+
     Post.objects(id = post_id).update_one(pull__comments__identification =  reply_id_int)
 
     # another solution for filtering
@@ -222,7 +211,6 @@ def edit_reply(post_id, reply_id):
 @post_bp.route("/post/<post_id>/like")
 @login_required
 def like(post_id):
-    user = User.objects(username = session['username'])
 
     post = Post.objects(id = post_id).first()
 
@@ -243,65 +231,48 @@ def like(post_id):
 
         return redirect(url_for("post.index"))
 
-    # elif reaction_id['favorite'] == 1 and reaction_id['like'] == None and reaction_id['dislike'] == None:
-    #     pass
-    #     # db = get_db()
+    elif reaction_id.favorite == True and reaction_id.like == None and reaction_id.dislike == None:
+        
 
-    #     # total_likes += 1
+        num_of_likes += 1
 
-    #     # db.execute(
-    #     #     f"UPDATE post SET likes = {total_likes} WHERE id = {post_id}")
+        post.likes = num_of_likes
 
-    #     # db.execute(f"update reaction set like = {1} , dislike = {0}")
+        post.save()
 
-    #     # db.commit()
+        reaction = Reaction.objects(id = reaction_id.id).first()
+        reaction.like = True
+        reaction.dislike = False
+        reaction.save()
 
-    #     return redirect(url_for("blog.index"))
+        return redirect(url_for("post.index"))
+
 
     elif reaction_id.like == True:
 
         reaction = Reaction.objects(id = reaction_id.id).first()
-        reaction.user = session['username']
-        reaction.post = post_id
         reaction.like = True
         reaction.dislike = False
         
-
-        # db.execute(
-        #     f"UPDATE reaction SET like = '{1}', dislike = '{0}' WHERE id = '{reaction_id['id']}'")
         post = Post.objects(id = post_id).first()
         post.likes = num_of_likes
         post.dislikes = num_of_dislikes
         
-        # db.execute(
-        #     f"UPDATE post SET likes = '{total_likes}', dislikes = '{total_dislikes}' WHERE id = {post_id}")
-
-        
+    
 
         return redirect(url_for("post.index"))
 
     elif reaction_id.dislike == True:
 
         reaction = Reaction.objects(id = reaction_id.id).first()
-        reaction.user = session['username']
-        reaction.post = post_id
         reaction.like = True
         reaction.dislike = False
         reaction.save()
-        
-
-        # db.execute(
-        #     f"UPDATE reaction SET like = '{1}', dislike = '{0}' WHERE id = '{reaction_id['id']}'")
-
+    
         post = Post.objects(id = post_id).first()
         post.likes = num_of_likes + 1
         post.dislikes = num_of_dislikes - 1
         post.save()
-
-        # db.execute(
-        #     f"UPDATE post SET likes = '{total_likes + 1}', dislikes = '{total_dislikes - 1}' WHERE id = {post_id}")
-
-        # db.commit()
 
         return redirect(url_for("post.index"))
 
@@ -310,7 +281,6 @@ def like(post_id):
 @login_required
 def dislike(post_id):
 
-    user = User.objects(username = session['username'])
 
     post = Post.objects(id = post_id).first()
 
@@ -330,26 +300,26 @@ def dislike(post_id):
 
         return redirect(url_for("post.index"))
 
-    # elif reaction_id['favorite'] == 1 and reaction_id['like'] == None and reaction_id['dislike'] == None:
+    elif reaction_id.favorite == True and reaction_id.like == False and reaction_id.dislike == False:
 
-    #     db = get_db()
+    
+        num_of_dislikes += 1
 
-    #     total_dislikes += 1
+        post.dislikes = num_of_dislikes
 
-    #     db.execute(
-    #         f"UPDATE post SET dislikes = {total_dislikes} WHERE id = {post_id}")
+        post.save()
 
-    #     db.execute(f"UPDATE reaction  SET like = {0} , dislike = {1}")
+        reaction = Reaction.objects(id = reaction_id.id).first()
+        reaction.like = False
+        reaction.dislike = True
+        reaction.save()
 
-    #     db.commit()
 
-    #     return redirect(url_for("blog.index"))
+        return redirect(url_for("post.index"))
 
     elif reaction_id.dislike == True:
 
         reaction = Reaction.objects(id = reaction_id.id).first()
-        reaction.user = session['username']
-        reaction.post = post_id
         reaction.like = False
         reaction.dislike = True
         
@@ -364,8 +334,6 @@ def dislike(post_id):
     elif reaction_id.like == True:
 
         reaction = Reaction.objects(id = reaction_id.id).first()
-        reaction.user = session['username']
-        reaction.post = post_id
         reaction.like = False
         reaction.dislike = True
         reaction.save()
@@ -385,25 +353,28 @@ def dislike(post_id):
 @login_required
 def favorite(post_id):
 
-    db = get_db()
-
-    favorite_id = db.execute(
-        f"select * from reaction where post_id = {post_id} and user_id = {session['uid']}").fetchone()
-
+    favorite_id = Reaction.objects(user = session['username'] , post = post_id).first()
+   
     if favorite_id == None:
 
-        db.execute(f"INSERT INTO reaction (post_id , user_id , favorite) VALUES (?,?,?);",
-                   (post_id, session['uid'], 1))
+        favorite = Reaction(user = session['username'] , post = post_id , favorite = True).save()
+        return redirect(url_for("post.index"))
 
-        db.commit()
+    elif favorite_id.favorite == False :
 
-        return redirect(url_for("blog.index"))
+        favorite = Reaction.objects(id = favorite_id.id).first()
+        favorite.favorite = True
+        
+        favorite.save()
 
-    elif favorite_id['favorite'] == None:
+        return redirect(url_for("post.index"))
 
-        db.execute(
-            f"UPDATE reaction SET favorite = '{1}' WHERE id = {favorite_id['id']}")
+    elif favorite_id.favorite == True :
+                    
+        favorite = Reaction.objects(id = favorite_id.id).first()
+        
+        favorite.favorite = True
+        
+        favorite.save()
 
-        db.commit()
-
-        return redirect(url_for("blog.index"))
+        return redirect(url_for("post.index"))

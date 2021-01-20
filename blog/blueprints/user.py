@@ -4,6 +4,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, validators, PasswordField, TextAreaField 
 from blog.forms import AddUserForm, EditUserInfoForm, ChangePasswordForm
 from blog.models import User, Post
+from bson import Binary, DBRef, ObjectId, SON
 
 # define our blueprint
 user_bp = Blueprint('user', __name__)

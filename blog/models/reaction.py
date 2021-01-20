@@ -11,3 +11,4 @@ class Reaction(Document):
     post = ReferenceField(Post)
     like = BooleanField(default = False)
     dislike = BooleanField(default = False)
+    favorite = BooleanField(default=False)

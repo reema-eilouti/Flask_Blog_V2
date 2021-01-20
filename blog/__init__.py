@@ -57,7 +57,7 @@ def create_app(test_config=None):
          likes = "1", dislikes = "0" , comments = []).save()
         
 
-        reaction_1 = Reaction(user = user_2 , post = post_3, like = True, dislike = False ).save()
+        reaction_1 = Reaction(user = user_2 , post = post_3, like = True, dislike = False , favorite = False ).save()
 
 
         return "Database initialized"
