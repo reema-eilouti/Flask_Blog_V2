@@ -2,7 +2,7 @@
 
 <!-- header block -->
 {% block header %}
-<h1>{% block title %}Posts{% endblock %}</h1>
+<h1>{% block title %}Searched Posts{% endblock %}</h1>
 
 
 {% endblock %}
@@ -16,23 +16,7 @@
 <!-- Modal -->
 
 
-<div class="div container">
 
-  <form method="POST" class="form-group">
-    <div style="height: 20%;">
-      {{ form.hidden_tag() }}
-
-      {{form.title.label}}
-      {{form.title(class_="form-control")}}
-
-      {{form.body.label}}
-      {{form.body(class_="form-control")}}
-    </div>
-    <center> {{form.submit(class_="btn btn-secondary")}} </center>
-    <hr style="height:2px;border-width:0;color:gray;background-color:gray">
-
-  </form>
-</div>
 
 {% for post in posts %}
 <article class="post">

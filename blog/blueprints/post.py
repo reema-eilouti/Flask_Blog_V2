@@ -389,3 +389,23 @@ def favorite(post_id):
         favorite.save()
 
         return redirect(url_for("post.index"))
+
+# unfinished text search
+@post_bp.route("/posts/search", methods=['GET','POST'])
+def search_posts():
+    
+    if request.method == 'POST':
+        print("000000000000000000000000000000000000000000000000000000000000000000000000000000")
+        search_keyword = str(request.form['search_keyword'])  
+        posts = Post.objects.search_text(search_keyword).first()
+        post_1 = posts.title
+        print(post_1)
+        print(posts)
+        print("000000000000000000000000000000000000000000000000000000000000000000000000000000")
+
+        return render_template("blog/search-posts.html" , posts = posts)
+
+
+    
+
+    

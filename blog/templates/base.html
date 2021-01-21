@@ -21,8 +21,15 @@
   <nav>
     <h1><a href="/"> <i class="fas fa-home"></i> Flask Blog  </a></h1>
 
+    <form action="{{ url_for('post.search_posts') }}" method="POST">
+      <input class="form-control me-2" type="search" name="search_keyword" placeholder="Search" aria-label="Search">
+      <button class="btn btn-outline-success" type="submit">Search</button>
+    </form>
+    
+
 
     {% if session['uid'] %}
+    
 
     <a href="{{url_for('post.latest_posts')}}" title="Latest-Posts" class="btn btn-secondary btn-sm mx-1" type="button" > <i class="fas fa-sort"></i> </a>
 
