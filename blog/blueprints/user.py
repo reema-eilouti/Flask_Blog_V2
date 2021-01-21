@@ -153,9 +153,9 @@ def edit_user():
 def get_users():
     
     users = User.objects
-
+    num_users = User.objects.count()
     # render 'list.html' blueprint with users
-    return render_template('user/list.html', users=users)
+    return render_template('user/list.html', users=users , num_users = num_users)
 
 
 
