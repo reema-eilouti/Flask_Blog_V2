@@ -3,6 +3,7 @@
 <!-- header block -->
 {% block header %}
 <h1>{% block title %}Searched Posts{% endblock %}</h1>
+<P>Found {{posts | count}} result from {{search_keyword}}</P>
 
 
 {% endblock %}
@@ -18,13 +19,14 @@
 
 
 
-{% for post in posts %}
+
 <article class="post">
   <header>
     <div>
-
+{% if posts %}
+    {% for post in posts %}
       <h1>{{ post.title }}</h1>
-      
+
       {% if session['role'] == 1 or session['role'] == 2 %}
       <a style="margin-left: 90%;" href="{{url_for('post.edit_post',post_id = post.id)}}" title="Edit"><i
           class="far fa-edit"></i></a>
@@ -46,7 +48,10 @@
 </article>
 <hr style="height:2px;border-width:0;color:gray;background-color:gray">
 
-{% endfor %}
 
+    {% endfor %}
+{% else %}
+<P>Nothing found with the word {{search_keyword}}</P>
+{% endif %}
 
 {% endblock content %}

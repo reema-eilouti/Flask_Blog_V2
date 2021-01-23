@@ -395,15 +395,11 @@ def favorite(post_id):
 def search_posts():
     
     if request.method == 'POST':
-        print("000000000000000000000000000000000000000000000000000000000000000000000000000000")
+        
         search_keyword = str(request.form['search_keyword'])  
-        posts = Post.objects.search_text(search_keyword).first()
-        post_1 = posts.title
-        print(post_1)
-        print(posts)
-        print("000000000000000000000000000000000000000000000000000000000000000000000000000000")
-
-        return render_template("blog/search-posts.html" , posts = posts)
+        results = Post.objects.search_text(search_keyword).order_by('$text_score')
+        
+        return render_template("blog/search-posts.html" , posts = results , search_keyword = search_keyword)
 
 
     
